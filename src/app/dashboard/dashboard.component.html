@@ -1,0 +1,118 @@
+<p-toast></p-toast>
+<div class="grid surface-400">
+    <div class="col-6 sm:col-6 p-3 lg:col-6 ">
+        <p-card *ngIf="currentUser" header="{{currentUser.name}}" class="border-round w-12rem">
+                <p class="w-2 text-left  text-blue-30 mr-3">{{currentUser.email}}</p>
+                <p class="w-2 text-left  text-blue-30 mr-3"> {{currentUser.mobile}}</p>
+        </p-card>
+    </div>
+    <div class="col-6 sm:col-6 p-3 lg:col-6 ">
+        <p-card  header="" class="border-round w-12rem h-3rem">
+                <div  class="text-right p-toolbar-group-right">
+                    <p-button (click)="exit()"  label="Logoff" icon="pi pi-power-off" styleClass="p-button-raised p-button-danger"></p-button>
+                </div>
+                <p>Date</p>
+                <p>Place</p>
+                </p-card>
+    </div>
+</div>  
+
+<div class="grid surface-400">
+        <div class="col-12 p-3 lg:col-12 ">
+            <p-card>
+            <p-table [value]="accounts" styleClass="p-datatable-sm" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Account Number</th>
+                        <th>Loan Amount</th>
+                        <th>Open date</th>
+                        <th>Type</th>
+                        <th>Cleared</th>
+                        <th>Balance</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-account>
+                    <tr>
+                        <td>
+                        <button (click)="accountClicked(account)" pButton pRipple type="button" label="{{account.account}}" class="p-button-text"></button>
+                        </td>
+                        <td>{{account.amount}}</td>
+                        <td>{{account.logged | date:'mediumDate' }}</td>
+                        <td>{{account.type}}</td>
+                        <td>{{account.paid | number: '1.0-0' }}</td>
+                        <td>{{outstanding(account) | number: '1.0-0'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <br/>
+            </p-card>
+    </div>
+    <div class="col-12 sm:col-6 p-3 lg:col-12">
+        <p-card>
+            <h4>Repayment Log</h4>
+            <div class="grid p-fluid">
+                <div *ngIf="Accs" class="col-12 md:col-2">
+                    <p-dropdown [options]="Accs" [(ngModel)]="selectedAcc" placeholder="Select Account" optionLabel="name" [showClear]="true"></p-dropdown>
+            </div>
+            <div class="col-12 md:col-2">
+                    <div class="p-inputgroup">
+                        <p-calendar [(ngModel)]="date"></p-calendar>
+                    </div>  
+                </div>
+                <div class="col-12 md:col-2">
+                    <div class="p-inputgroup">
+                        <p-inputNumber [(ngModel)]="lamt" mode="decimal" locale="en-IN" [minFractionDigits]="2">
+                        </p-inputNumber>                    </div>
+                </div>  
+                <div class="col-12 md:col-2">
+                    <div class="p-inputgroup">
+                        <div class="p-inputgroup">
+                            <input type="text" pInputText [(ngModel)]="description"> <span class="ml-2"></span>
+                        </div>
+                    </div>
+                </div>
+                <h3>{{description}}</h3>
+                <div class="col-12 md:col-2">
+                    <div class="p-inputgroup">
+                        <div class="p-inputgroup">
+                            <button (click)="payLoan()" label="Repayment" pButton pRipple type="button" class="p-button-raised p-button-info"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </p-card>
+    </div>
+    <div class="col-12 sm:col-6 p-3 lg:col-12">
+        <p-card>
+            <div class="grid p-fluid">
+                <div class="col-12 md:col-3">
+                    <div class="p-inputgroup">
+                        <button pButton pRipple type="button" label="Open Account" class="p-button-info p-button-text"></button>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                        <p-dropdown [options]="types" [(ngModel)]="selectedType" placeholder="Select a Type" optionLabel="name" [showClear]="true"></p-dropdown>
+                </div>
+
+                <div class="col-12 md:col-3">
+                    <div class="p-inputgroup">
+                        <p-inputNumber [(ngModel)]="lamt" inputId="locale-indian" mode="decimal" locale="en-IN" [minFractionDigits]="2">
+                        </p-inputNumber>                    
+                    </div>
+                </div>
+                        
+                <div class="col-12 md:col-3">
+                    <div class="p-inputgroup">
+                        <div class="p-inputgroup">
+                            <button (click)="apply()" pButton pRipple type="button" label={{loanText}} class="p-button-raised p-button-info"></button>                        </div>
+                        </div>
+                </div>
+            </div>        </p-card>
+    </div>
+</div>
+<p-dialog header="Header" [(visible)]="display" [style]="{width: '50vw'}">
+    <p>{{dialogText}}</p>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="display=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

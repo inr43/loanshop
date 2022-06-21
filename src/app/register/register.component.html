@@ -1,0 +1,53 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-12 sm:col-6 p-8 lg:col-12">
+        <p-card>
+            <form *ngIf="!isOverlay" [formGroup]="form" >
+                <div class="card text-center mb-5">
+            <h3>Register New User</h3>
+            <div class="field">
+                <small *ngIf="loginForm.user.invalid && isSubmitted" class="p-error">
+                    <span *ngIf="loginForm.user.errors?.required">User is Mandatory</span> </small>
+                <input id="user" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                        placeholder="user id"
+                        formControlName="user">
+            </div>
+            <div class="field">
+                <small *ngIf="loginForm.name.invalid && isSubmitted" class="p-error">
+                    <span *ngIf="loginForm.name.errors?.required">Name is Mandatory</span> </small>
+                <input id="name" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                        placeholder="Full user name"
+                        formControlName="name">
+            </div>
+            <div class="field">
+                <small *ngIf="loginForm.password.invalid && isSubmitted" class="p-error">
+                    <span *ngIf="loginForm.password.errors?.required">Password is Mandatory</span> </small>
+                <input id="password" type="password" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                        placeholder="Enter the password "
+                        formControlName="password">
+            </div>
+            <div class="field">
+                <small *ngIf="loginForm.email.invalid && isSubmitted" class="p-error">
+                    <span *ngIf="loginForm.email.errors?.required">Email is Mandatory</span> 
+                    <span *ngIf="loginForm.email.errors?.email">Email id is Invalid</span>
+                </small>
+                <input id="email" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                        placeholder="Email id"
+                        formControlName="email">
+            </div>
+            <div class="field">
+                <small *ngIf="loginForm.mobile.invalid && isSubmitted" class="p-error">
+                    <span *ngIf="loginForm.mobile.errors?.required">Mobile is Mandatory</span> </small>
+                <input id="mobile" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                        placeholder="Mobile Number"
+                        formControlName="mobile">
+            </div>
+            <button pButton pRipple type="button" class="p-button-text p-button-plain" disabled="true">Already have an account?</button>
+            <button pButton pRipple type="button" class="p-button-text text-blue-500" (click)="signIn()">Sign-in</button>
+    
+            <button pButton pRipple label="Register" icon="pi pi-plus" (click)="submit()" class="w-full" ></button>
+        </div>
+        </form>
+    </p-card>
+</div>
+</div>

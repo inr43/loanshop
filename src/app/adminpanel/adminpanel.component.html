@@ -1,0 +1,167 @@
+<p-toast></p-toast>
+<div class="grid surface-400">
+    <div class="col-12  p-3 lg:col-12 ">
+        <p-toolbar >
+        <h2>Admin Panel</h2>
+        <div  class="p-toolbar-group-right">
+            <p-button (click)="loanUsers()"  label="Loan Users" class="mr-5" icon="pi pi-home" styleClass="p-button-raised p-button-primary"></p-button>
+            <p-button (click)="exit()"  label="Exit" icon="pi pi-power-off" styleClass="p-button-raised p-button-danger"></p-button>
+        </div>
+        </p-toolbar>
+    </div>
+    <br/>
+    <div class="p-3 sm:col-12 ">
+        <p-table [value]="loanLedger" [rowHover]="true" 
+        [rows]="5"  [showCurrentPageReport]="true"   
+        [loading]="loadingLedger"  responsiveLayout="scroll" [paginator]="true" 
+        currentPageReportTemplate="{first} to {last} entries">
+        <ng-template pTemplate="caption">
+        <div class="table-header">
+            Payment Received 
+        </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Days</th>
+            <th>Description</th>
+            <th>Acknowledge</th>
+            <th>Reject</th>
+        </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ledger>
+        <tr>
+            <td>
+                <button  pButton pRipple type="button" label="{{ledger.accountid.userid.name}}" class="p-button-text"></button>
+            </td>
+            <td>{{ledger.amount}}</td>
+            <td>{{ledger.logged | date: 'mediumDate'}}</td>
+            <td>{{ledger.days}}</td>
+            <td>{{ledger.description}}</td>
+            <td>
+                <button  (click)="onPaymmentApprove(ledger)" pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-outlined"></button>            
+           </td>
+            <td>
+                <button (click)="onLedgerDel(ledger.id)"pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"></button>
+            </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+    <div class="p-3 sm:col-12 ">
+        <p-table [value]="loanqueue"         [rowHover]="true" 
+        [rows]="5"  [showCurrentPageReport]="true"   
+        [loading]="loading"  responsiveLayout="scroll" [paginator]="true" 
+        currentPageReportTemplate="{first} to {last} entries">
+        <ng-template pTemplate="caption">
+        <div class="table-header">
+            Loan Request Queues
+        </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Interest</th>
+            <th>Amount</th>
+            <th>Approve</th>
+            <th>Reject</th>
+        </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-loan>
+        <tr>
+            <td>
+                <button  pButton pRipple type="button" label="{{loan.userid.name}}" class="p-button-text"></button>
+            </td>
+            <td>
+                <button (click)="showResponsiveDialog()" pButton pRipple type="button" label="{{loan.logged | date:'mediumDate'  }}" class="p-button-text"></button>
+                <p-dialog header="Confirm New Loan Details" [(visible)]="displayResponsive" 
+                    [breakpoints]="{'960px': '75vw','640px': '100vw'}" [style]="{height: '40vw',width: '50vw'}"
+                    [draggable]="false" [resizable]="true" [modal]="true">
+                    <p-calendar [(ngModel)]="date" [style]="{width: '30vw'}"></p-calendar>
+                    <div class="grid p-fluid">
+                        <div class="field col-12 md:col-3">
+                            <label for="integeronly">Interest Rate</label>
+                            <p-inputNumber inputId="integeronly" [(ngModel)]="interestRate">
+                            </p-inputNumber>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label for="integeronly">Loan Amount</label>
+                            <p-inputNumber inputId="integeronly" [(ngModel)]="loan.amount">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="footer">
+                    <p-button (click)="displayResponsive=false" label="No" styleClass="p-button-text"></p-button>
+                    <p-button (click)="onLoanApprove(loan, loan.userid.id)" label="Approve" styleClass="p-button-text"></p-button>
+                    </ng-template>
+                </p-dialog>           
+            </td>
+            <td>{{interestRate}}%</td>
+            <td>{{loan.amount}}</td>
+            <td>
+                <button  (click)="onLoanApprove(loan, loan.userid.id)" pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-outlined"></button>            
+           </td>
+            <td>
+                <button (click)="onLoanDel(loan.id)"pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"></button>
+            </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+    <br/>
+    <div class="col-12  p-3 lg:col-12 ">
+        <p-table #dt [value]="users"  dataKey="id"
+        styleClass="p-datatable-students" [rowHover]="true" 
+        [rows]="5"  [showCurrentPageReport]="true"   
+        [loading]="loading"  responsiveLayout="scroll" [paginator]="true" 
+        currentPageReportTemplate="{first} to {last} entries"
+        [filterDelay]="0" [globalFilterFields]="['newuser']">
+        <ng-template pTemplate="caption">
+        <div class="table-header">
+            Users
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" 
+                    (input)="dt.filterGlobal($any($event.target).value, 'contains')" 
+                    placeholder="Search" /></span>
+        </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Approve</th>
+            <th>Reject</th>
+            <th>Delete User</th>
+        </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+        <tr>
+            <td>
+                <button  pButton pRipple type="button" label="{{user.name}}" class="p-button-text"></button>
+            </td>
+            <td>{{user.email}}</td>
+            <td>
+                <button *ngIf="user.newuser" (click)="onApprove(user.id)" pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-outlined"></button>            
+           </td>
+            <td>
+                <button *ngIf="user.newuser" (click)="onDel(user.id)"pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"></button>
+            </td>
+            <td>
+                <button *ngIf="user.user!='admin'" (click)="onDel(user.id)" pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"></button>           
+            </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>  
+</div>
+<br/>
+<p-dialog header="Header" [(visible)]="display" [style]="{width: '50vw'}">
+    <p>The Entry has been removed </p>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="display=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
