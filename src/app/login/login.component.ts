@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
     this.userService.validateUser(user).subscribe((response)=> {
       this.localStorage.setToken(response.key);
-      console.log("token received "+response)
+      console.log("token received: "+response)
 //      this.route.navigateByUrl('/');
        if( user.user === "admin") {
         this.route.navigateByUrl('admin');
