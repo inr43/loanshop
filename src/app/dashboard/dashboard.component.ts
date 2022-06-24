@@ -57,7 +57,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = this.activatedroute.snapshot.paramMap.get('id');
-    console.log(this.userId)
+    if (!this.userId){
+      console.log("no user passed, returning"+this.userId) 
+      this.localStorage.removeToken()
+      this.route.navigateByUrl('thankyou')}
+    else { console.log("user id received "+this.userId)}
     this._getUser();
     this._getAccounts();
     this.types = [
@@ -143,8 +147,7 @@ export class DashboardComponent implements OnInit {
       if ( value.account === acc )
         acc=value.id
     })
-    console.log("Acc id"+acc);
-
+ 
     const ledger : Ledger = {
       accountid : acc,
       amount : this.lamt,
@@ -177,7 +180,6 @@ export class DashboardComponent implements OnInit {
     var days = difference / (1000 * 60 * 60 * 24);
 
     var interest = account.rate/100;
-    console.log("balance "+balance+" interest "+interest+" days "+days)
 
     var sum = (balance * interest * days )/365;
     return Math.round(sum+balance);

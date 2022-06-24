@@ -15,7 +15,7 @@ export class AuthGuardService implements CanActivate{
       const token = this.localStorageToken.getToken();
   
       if ( token ) {
-        console.log('AuthGuar token Found '+token);
+        console.log('AuthGuard token Found '+token);
         const tokenCode = JSON.parse(atob(token.split('.')[1]));
         console.log(tokenCode);
         if (!this._tokenExpired(tokenCode.exp))
