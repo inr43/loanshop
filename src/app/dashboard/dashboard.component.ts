@@ -44,7 +44,8 @@ export class DashboardComponent implements OnInit {
   Accs : Type[]=[];
   selectedAcc : Type;
   description: "notes"
-      
+  outstandingAmount :number = 0;
+
   constructor(private fb: FormBuilder,
     private messageService : MessageService,
     private route: Router,
@@ -172,6 +173,11 @@ export class DashboardComponent implements OnInit {
     this.clearText()
   }
 
+  makezero()
+  {
+    this.outstandingAmount = 0
+  }
+  
   outstanding(account) { 
     var balance = account.amount - account.paid
     const date1 = new Date()
@@ -182,6 +188,8 @@ export class DashboardComponent implements OnInit {
     var interest = account.rate/100;
 
     var sum = (balance * interest * days )/365;
+
+    this.outstandingAmount = this.outstandingAmount + Math.round(sum+balance)
     return Math.round(sum+balance);
   }
 

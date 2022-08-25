@@ -3,6 +3,7 @@
     <div class="col-12  p-3 lg:col-12 ">
         <p-toolbar >
         <h2>Loans</h2>
+        <h2>{{total | number: '1.0-0'}}</h2>
         <div  class="p-toolbar-group-right">
             <p-button (click)="home()"  label="Home" class="mr-5" icon="pi pi-home" styleClass="p-button-raised p-button-info"></p-button>
         </div>
@@ -22,7 +23,7 @@
     </ng-template>
     <ng-template pTemplate="header">
     <tr>
-        <th>Name</th>
+        <th>Name {{makezero()}}</th>
         <th>Amount</th>
         <th>Date</th>
         <th>Paid</th>

@@ -11,6 +11,7 @@ import { AccountService } from '../services/account.service';
 export class LoanusersComponent implements OnInit {
   accounts  : Accounts[]=[]
   loadingAccounts: boolean=true;
+  total : number = 0;
 
   constructor(private route: Router,
               private accountService: AccountService) { }
@@ -31,6 +32,11 @@ export class LoanusersComponent implements OnInit {
     this.route.navigateByUrl('admin');
   }
 
+  makezero()
+  {
+    this.total = 0;
+  }
+  
   outstanding(account) { 
     var balance = account.amount - account.paid
     const date1 = new Date()
@@ -40,6 +46,8 @@ export class LoanusersComponent implements OnInit {
     var interest = account.rate/100;
     console.log("balance "+balance+" interest "+interest+" days "+days)
     var sum = (balance * interest * days )/365;
+    this.total = this.total + Math.round(sum+balance)
+    console.log("total "+this.total)
     return Math.round(sum+balance);
   }
 
