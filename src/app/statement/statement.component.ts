@@ -40,6 +40,7 @@ export class StatementComponent implements OnInit {
       console.log("Ledger received "+response);
  //     this.account = response.ledger.accountid;
       this.ledger = response;
+      
     },
     (error) => { 
       console.log(error.error.message);
